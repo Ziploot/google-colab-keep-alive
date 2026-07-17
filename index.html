@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZipLoot - Google Colab Keep-Alive Gateway</title>
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Custom Stylesheet with cache busting version -->
+  <link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+  <div class="decor-glow glow-1"></div>
+  <div class="decor-glow glow-2"></div>
+
+  <div class="container">
+    <header class="app-header">
+      <div class="logo">
+        <i data-lucide="zap" class="logo-icon"></i>
+        <span>ZipLoot <span class="accent-text">Colab Bypass</span></span>
+      </div>
+      <p class="tagline">Bypass Google Colab Idle Timeout Limits &amp; Keep GPU Notebooks Active 24/7 ($0 Setup)</p>
+    </header>
+
+    <main class="app-layout">
+      <!-- Left Panel: Instructions and Userscript Installer -->
+      <section class="control-panel glass-card">
+        <h2 class="section-title">
+          <i data-lucide="settings"></i> 1-Click Tampermonkey Install
+        </h2>
+        
+        <p class="section-desc">
+          To automate Colab interactions completely in the background without keeping console windows open, install our official Tampermonkey Userscript.
+        </p>
+
+        <div class="status-indicator">
+          <span class="pulse-dot"></span>
+          <span>Automatic Clicker, Scroll Simulation, &amp; Reconnection Active</span>
+        </div>
+
+        <div class="btn-group">
+          <a href="colab-keep-alive.user.js" class="primary-btn" target="_blank">
+            <i data-lucide="download" class="btn-icon"></i>
+            <span>Install Tampermonkey Userscript</span>
+          </a>
+        </div>
+
+        <div class="warning-box">
+          <p class="warning-title"><i data-lucide="alert-triangle"></i> Important System Boundary</p>
+          <p class="warning-desc">
+            This bypass solves Google Colab's <strong>90-minute Idle Timeout</strong>. However, Google's 12-hour/24-hour absolute VM runtime limits cannot be bypassed. Use the Python Checkpoint script to save checkpoints directly to Google Drive.
+          </p>
+        </div>
+      </section>
+
+      <!-- Right Panel: Code Blocks for Manual Injection & Python Auto-Saver -->
+      <div class="right-panel-group">
+        <!-- Tabbed Manual Scripts -->
+        <section class="code-panel glass-card">
+          <h2 class="section-title">
+            <i data-lucide="code-2"></i> Scripts &amp; Snippets
+          </h2>
+          
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="js-console">Console Script</button>
+            <button class="tab-btn" data-tab="python-drive">Python Drive Auto-Saver</button>
+          </div>
+
+          <!-- JavaScript Browser Console Script -->
+          <div class="tab-content" id="js-console-tab">
+            <p class="tab-desc">Right-click on your Colab page, select "Inspect Element", open the "Console" tab, paste this code, and press Enter:</p>
+            <pre><code id="code-console">function KeepAlive() {
+  console.log("[ZipLoot] Simulating user activity...");
+  
+  // Click the Connect Button if disconnected
+  const connectBtn = document.querySelector("colab-connect-button");
+  if (connectBtn) {
+    const innerBtn = connectBtn.shadowRoot ? connectBtn.shadowRoot.querySelector("#connect") : null;
+    if (innerBtn && innerBtn.textContent.includes("Reconnect")) {
+      innerBtn.click();
+      console.log("[ZipLoot] Clicked Reconnect Button.");
+    }
+  }
+
+  // Simulate scrolling viewport
+  const scroller = document.querySelector(".notebook-vertical-scroller");
+  if (scroller) {
+    scroller.scrollTop += 10;
+    setTimeout(() => { scroller.scrollTop -= 10; }, 200);
+  }
+}
+setInterval(KeepAlive, 60000);</code></pre>
+            <button class="copy-btn" data-target="code-console"><i data-lucide="copy"></i> Copy Script</button>
+          </div>
+
+          <!-- Python Drive Auto-Saver Script -->
+          <div class="tab-content hidden" id="python-drive-tab">
+            <p class="tab-desc">Paste this block into the top cell of your Google Colab notebook. It mounts Google Drive and saves checkpoint weights every 10 minutes to prevent data loss:</p>
+            <pre><code id="code-python">import os
+import time
+from google.colab import drive
+
+# Mount Google Drive
+drive.mount('/content/drive')
+
+# Checkpoint backup directory
+backup_path = "/content/drive/MyDrive/Colab_Checkpoints"
+os.makedirs(backup_path, exist_ok=True)
+
+print(f"Checkpoint backups will be saved automatically to: {backup_path}")
+
+# Example automatic checkpoint execution thread
+# Run this cell or run the save commands inside your training loops:
+# shutil.copy2("local_weights.pth", os.path.join(backup_path, "weights_latest.pth"))</code></pre>
+            <button class="copy-btn" data-target="code-python"><i data-lucide="copy"></i> Copy Script</button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <p>&copy; 2026 ZipLoot. Google Colab utility. Open-source release.</p>
+    </footer>
+  </div>
+
+  <!-- Custom Scripts with version cache bust -->
+  <script src="app.js?v=1"></script>
+</body>
+</html>

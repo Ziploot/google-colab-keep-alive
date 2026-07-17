@@ -272,6 +272,9 @@
         }
     }
 
+    const isTestLab = window.location.href.includes("test-lab.html");
+    const intervalTime = isTestLab ? 2000 : 30000;
+
     // 7. Core Loop Execution
     setInterval(() => {
         if (!isRunning) return;
@@ -281,5 +284,5 @@
         } catch (err) {
             console.error("[ZipLoot] Keepalive loop error:", err);
         }
-    }, 30000); // Check every 30 seconds
+    }, intervalTime);
 })();
